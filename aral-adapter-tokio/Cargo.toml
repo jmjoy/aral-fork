@@ -1,0 +1,10 @@
+[package]
+name = "aral-adapter-tokio"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.33.0", features = ["fs", "time", "rt", "io-util"] }
+aral-trait = { version = "0.1.0", path = "../aral-trait" }
