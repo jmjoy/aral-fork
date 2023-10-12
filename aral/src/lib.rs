@@ -1,56 +1,57 @@
 #![feature(return_position_impl_trait_in_trait)]
 #![feature(async_fn_in_trait)]
 
-use enum_dispatch::enum_dispatch;
-use fs::Fs;
-use io::Read;
-use std::{default, ptr::null_mut, sync::OnceLock};
-
-pub mod fs;
 pub mod io;
+pub mod fs;
+pub mod task;
 
-pub trait Runtime {
-    fn fs(&'static self) -> &'static impl fs::Fs;
+use std::sync::OnceLock;
+use aral_trait::{fs::Fs, task::Task};
+
+static RUNTIME: OnceLock<Runtime> = OnceLock::new();
+
+pub enum Runtime {
+    #[cfg(feature = "adapter-tokio")]
+    Tokio,
 }
 
-pub struct TokioRuntime;
-
-pub struct TokioFs;
-
-pub struct TokioFile;
-
-static TOKIO_RUNTIME: TokioRuntime = TokioRuntime;
-static TOKIO_FS: TokioFs = TokioFs;
-
-impl Runtime for TokioRuntime {
-    fn fs(&'static self) -> &'static impl fs::Fs {
-        &TOKIO_FS
-    }
-}
-
-enum WhichRuntime {
-    TokioRuntime,
-}
-
-impl Runtime for WhichRuntime {
-    fn fs(&'static self) -> &'static impl fs::Fs {
-        match self {
-            WhichRuntime::TokioRuntime => Runtime::fs(&TOKIO_RUNTIME),
+impl Default for Runtime {
+    #[inline]
+    fn default() -> Self {
+        if cfg!(feature = "adapter-tokio") {
+            Runtime::Tokio
+        } else {
+            panic!("please specify runtime");
         }
     }
 }
 
-static WHICH_RUNTIME: OnceLock<WhichRuntime> = OnceLock::new();
+impl aral_trait::Runtime for Runtime {
+    #[inline]
+    fn fs(&'static self) -> &'static impl Fs {
+        match self {
+            #[cfg(feature = "adapter-tokio")]
+            Runtime::Tokio => aral_adapter_tokio::RUNTIME.fs(),
+            _ => panic!("please specify runtime"),
+        }
+    }
 
-fn set_which_runtime(rt: WhichRuntime) {
-    WHICH_RUNTIME.set(rt);
+    #[inline]
+    fn task(&'static self) -> &'static impl Task {
+        match self {
+            #[cfg(feature = "adapter-tokio")]
+            Runtime::Tokio => aral_adapter_tokio::RUNTIME.task(),
+            _ => panic!("please specify runtime"),
+        }
+    }
 }
 
-fn get_which_runtime() -> &'static WhichRuntime {
-    WHICH_RUNTIME.get().unwrap()
+pub fn set_runtime(runtime: Runtime) {
+    if let Err(_) = RUNTIME.set(runtime) {
+        panic!("runtime has set")
+    }
 }
 
-async fn foo() {
-    let mut file = get_which_runtime().fs().create_file("path").await.unwrap();
-    file.read(&mut []).await.unwrap();
+fn get_runtime() -> &'static impl aral_trait::Runtime {
+    RUNTIME.get_or_init(Default::default)
 }

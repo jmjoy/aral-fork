@@ -7,5 +7,6 @@ pub mod task;
 
 pub trait Runtime {
     fn fs(&'static self) -> &'static impl fs::Fs;
+
     fn task(&'static self) -> &'static impl task::Task;
 }

@@ -3,5 +3,5 @@ resolver = "2"
 members = [
   "aral",
   "aral-trait",
-  "aral-adapter-*",
+  "aral-adapters/*",
 ]

@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.33.0", features = ["fs", "time", "rt", "io-util"] }
-aral-trait = { version = "0.1.0", path = "../aral-trait" }
+aral-trait = { version = "0.1.0", path = "../../aral-trait" }

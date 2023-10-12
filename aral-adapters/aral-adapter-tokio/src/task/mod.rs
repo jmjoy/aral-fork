@@ -26,12 +26,13 @@ pub struct TaskImpl;
 
 impl Task for TaskImpl {
     #[inline]
-    fn sleep(duration: std::time::Duration) -> impl std::future::Future<Output = ()> + Send {
+    fn sleep(&self, duration: std::time::Duration) -> impl std::future::Future<Output = ()> + Send {
         tokio::time::sleep(duration)
     }
 
     #[inline]
     fn spawn<T: Send + 'static>(
+&self, 
         future: impl std::future::Future<Output = T> + Send + 'static,
     ) -> impl JoinHandle<T> + Send {
         JoinHandleImpl(tokio::spawn(future))
@@ -39,6 +40,7 @@ impl Task for TaskImpl {
 
     #[inline]
     fn spawn_blocking<T: Send + 'static>(
+&self, 
         f: impl FnOnce() -> T + Send + 'static,
     ) -> impl JoinHandle<T> + Send {
         JoinHandleImpl(tokio::task::spawn_blocking(f))
