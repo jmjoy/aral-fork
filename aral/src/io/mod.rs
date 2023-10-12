@@ -1,1 +1,1 @@
-pub use aral_trait::io::{BufRead, Read, Write, Seek};
+pub use aral_trait::io::{BufRead, Read, Seek, Write};

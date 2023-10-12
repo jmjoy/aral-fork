@@ -1,4 +1,4 @@
-use crate::Runtime;
+use crate::{Noop, Runtime};
 use aral_trait::{
     fs::{File, Fs, OpenOptions},
     io::{Read, Seek, Write},
@@ -8,199 +8,260 @@ use std::{
     io::Result,
     path::{Path, PathBuf},
 };
-use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt};
 
-pub struct FileImpl(tokio::fs::File);
-
-impl File for FileImpl {
+impl File for Noop {
     #[inline]
     fn metadata(&self) -> impl Future<Output = Result<std::fs::Metadata>> {
-        self.0.metadata()
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn set_len(&self, size: u64) -> impl Future<Output = Result<()>> {
-        self.0.set_len(size)
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn set_permissions(&self, perm: std::fs::Permissions) -> impl Future<Output = Result<()>> {
-        self.0.set_permissions(perm)
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn sync_all(&self) -> impl Future<Output = Result<()>> {
-        self.0.sync_all()
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn sync_data(&self) -> impl Future<Output = Result<()>> {
-        self.0.sync_data()
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn try_clone(&self) -> impl Future<Output = Result<impl File>> {
-        async move { self.0.try_clone().await.map(FileImpl) }
+        no_adapter_specified!();
+        async move { Ok(Noop) }
     }
 }
 
-impl Read for FileImpl {
+impl Read for Noop {
     #[inline]
     fn read(&mut self, buf: &mut [u8]) -> impl Future<Output = Result<usize>> {
-        async move { AsyncReadExt::read(&mut self.0, buf).await }
+        async move {
+            no_adapter_specified!();
+        }
     }
 }
 
-impl Write for FileImpl {
+impl Write for Noop {
     #[inline]
     fn write(&mut self, buf: &[u8]) -> impl Future<Output = Result<usize>> {
-        async move { AsyncWriteExt::write(&mut self.0, buf).await }
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     #[inline]
     fn flush(&mut self) -> impl Future<Output = Result<()>> {
-        async move { AsyncWriteExt::flush(&mut self.0).await }
+        async move {
+            no_adapter_specified!();
+        }
     }
 }
 
-impl Seek for FileImpl {
+impl Seek for Noop {
     #[inline]
     fn seek(&mut self, pos: std::io::SeekFrom) -> impl Future<Output = Result<u64>> {
-        async move { AsyncSeekExt::seek(&mut self.0, pos).await }
+        async move {
+            no_adapter_specified!();
+        }
     }
 }
 
-#[derive(Default)]
-pub struct OpenOptionsImpl(tokio::fs::OpenOptions);
-
-impl OpenOptions for OpenOptionsImpl {
+impl OpenOptions for Noop {
     #[inline]
     fn append(&mut self, append: bool) -> &mut Self {
-        self.0.append(append);
-        self
+        no_adapter_specified!();
     }
 
     #[inline]
     fn create(&mut self, create: bool) -> &mut Self {
-        self.0.create(create);
-        self
+        no_adapter_specified!();
     }
 
     #[inline]
     fn create_new(&mut self, create_new: bool) -> &mut Self {
-        self.0.create_new(create_new);
-        self
+        no_adapter_specified!();
     }
 
     fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { self.0.open(path).await.map(FileImpl) }
+        no_adapter_specified!();
+        async move { Ok(Noop) }
     }
 
     #[inline]
     fn read(&mut self, read: bool) -> &mut Self {
-        self.0.read(read);
-        self
+        no_adapter_specified!();
     }
 
     #[inline]
     fn truncate(&mut self, truncate: bool) -> &mut Self {
-        self.0.truncate(truncate);
-        self
+        no_adapter_specified!();
     }
 
     #[inline]
     fn write(&mut self, write: bool) -> &mut Self {
-        self.0.write(write);
-        self
+        no_adapter_specified!();
     }
 }
 
 impl Fs for Runtime {
     fn create_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { tokio::fs::File::create(path).await.map(FileImpl) }
+        no_adapter_specified!();
+        async move { Ok(Noop) }
     }
 
     fn open_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { tokio::fs::File::open(path).await.map(FileImpl) }
+        no_adapter_specified!();
+        async move { Ok(Noop) }
     }
 
     fn open_options(&self) -> impl OpenOptions {
-        OpenOptionsImpl(tokio::fs::OpenOptions::new())
+        no_adapter_specified!();
+        Noop
     }
 
     fn canonicalize(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
-        tokio::fs::canonicalize(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn copy(
         &self, from: impl AsRef<Path>, to: impl AsRef<Path>,
     ) -> impl Future<Output = Result<u64>> {
-        tokio::fs::copy(from, to)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn create_dir(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
-        tokio::fs::create_dir(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn create_dir_all(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
-        tokio::fs::create_dir_all(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn hard_link(
         &self, src: impl AsRef<Path>, dst: impl AsRef<Path>,
     ) -> impl Future<Output = Result<()>> {
-        tokio::fs::hard_link(src, dst)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn metadata(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<std::fs::Metadata>> {
-        tokio::fs::metadata(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn read(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>>> {
-        tokio::fs::read(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn read_link(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
-        tokio::fs::read_link(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn read_to_string(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<String>> {
-        tokio::fs::read_to_string(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn remove_dir(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
-        tokio::fs::remove_dir(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn remove_dir_all(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
-        tokio::fs::remove_dir_all(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn remove_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
-        tokio::fs::remove_file(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn rename(
         &self, from: impl AsRef<Path>, to: impl AsRef<Path>,
     ) -> impl Future<Output = Result<()>> {
-        tokio::fs::rename(from, to)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn set_permissions(
         &self, path: impl AsRef<Path>, perm: std::fs::Permissions,
     ) -> impl Future<Output = Result<()>> {
-        tokio::fs::set_permissions(path, perm)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn symlink_metadata(
         &self, path: impl AsRef<Path>,
     ) -> impl Future<Output = Result<std::fs::Metadata>> {
-        tokio::fs::symlink_metadata(path)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 
     fn write(
         &self, path: impl AsRef<Path>, contents: impl AsRef<[u8]>,
     ) -> impl Future<Output = Result<()>> {
-        tokio::fs::write(path, contents)
+        no_adapter_specified!();
+        async move {
+            no_adapter_specified!();
+        }
     }
 }

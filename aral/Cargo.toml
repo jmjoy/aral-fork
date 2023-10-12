@@ -26,6 +26,7 @@ adapter-tokio = ["aral-adapter-tokio"]
 # adapter-async-std = ["async-std"]
 
 [dependencies]
+aral-adapter-noop = { version = "0.1.0", path = "../aral-adapters/aral-adapter-noop" }
 aral-adapter-tokio = { version = "0.1.0", optional = true, path = "../aral-adapters/aral-adapter-tokio" }
 aral-trait = { version = "0.1.0", path = "../aral-trait" }
 
