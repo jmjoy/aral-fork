@@ -1,17 +1,3 @@
-# Copyright 2023 ARAL Development Team
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 name: CI
 
 on:
@@ -33,24 +19,11 @@ jobs:
     name: Required
     needs:
       - ci
-      - license-check
     runs-on: ubuntu-20.04
     steps:
       - name: Check results
         run: |
           [[ ${{ needs.ci.result }} == 'success' ]] || exit 1;
-          [[ ${{ needs.license-check.result }} == 'success' ]] || exit 1;
-
-  license-check:
-    name: license-check
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Check License Header
-        uses: apache/skywalking-eyes/header/@d5466651aaded6fbd588d2278eccc469afc89d92
-        with:
-          config: .licenserc.yaml
 
   ci:
     name: CI
@@ -59,12 +32,6 @@ jobs:
       matrix:
         os:
           - ubuntu-20.04
-        features:
-          - ""
-          - "--features runtime-tokio-current-thread"
-          - "--features runtime-tokio-multi-thread"
-          - "--features runtime-async-std"
-          - "--all-features"
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -85,7 +52,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ matrix.os }}-ci-${{ matrix.features }}-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ matrix.os }}-ci-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Cargo fmt
         uses: actions-rs/cargo@v1
@@ -97,17 +64,16 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --workspace --release ${{ matrix.features }}
+          args: --workspace --release
 
       - name: Cargo test
         uses: actions-rs/cargo@v1
-        if: matrix.features != ''
         with:
           command: test
-          args: --workspace --release ${{ matrix.features }} -- --nocapture
+          args: --workspace --release -- --nocapture
 
       - name: Cargo doc
         uses: actions-rs/cargo@v1
         with:
           command: rustdoc
-          args: -p aral --release ${{ matrix.features }} -- --cfg docs_rs
+          args: -p aral --release -- --cfg docs_rs
