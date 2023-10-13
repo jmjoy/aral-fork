@@ -1,34 +1,21 @@
-# Copyright 2023 ARAL Development Team
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 [package]
 name = "aral"
 description = "Async Runtime Aggregation Layer."
-version = "0.1.0-dev"
-authors = ["ARAL Development Team", "jmjoy <jmjoy@apache.org>"]
-edition = "2021"
-license = "Apache-2.0 OR MIT OR MulanPSL-2.0"
-repository = "https://github.com/jmjoy/aral.git"
+version = "0.1.0"
+authors = { workspace = true }
+edition = { workspace = true }
+license = { workspace = true }
+repository = { workspace = true }
+readme = "../README.md"
 
 [features]
-adapter-tokio = ["aral-adapter-tokio"]
-# adapter-async-std = ["async-std"]
+runtime-tokio = ["aral-runtime-tokio"]
+# runtime-async-std = ["async-std"]
 
 [dependencies]
-aral-adapter-noop = { version = "0.1.0", path = "../aral-adapters/aral-adapter-noop" }
-aral-adapter-tokio = { version = "0.1.0", optional = true, path = "../aral-adapters/aral-adapter-tokio" }
-aral-trait = { version = "0.1.0", path = "../aral-trait" }
+aral-runtime-noop = { workspace = true }
+aral-runtime-tokio = { workspace = true, optional = true }
+aral-trait = { workspace = true }
 
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "docs_rs"]

@@ -11,8 +11,8 @@ macro_rules! no_adapter_specified {
     };
 }
 
-pub mod fs;
-pub mod task;
+mod fs;
+mod task;
 
 pub struct Runtime;
 
@@ -21,4 +21,8 @@ struct Noop;
 
 struct NoopData<T>(PhantomData<T>);
 
-impl aral_trait::Runtime for Runtime {}
+impl aral_trait::Runtime for Runtime {
+    fn name() -> &'static str {
+        "noop"
+    }
+}

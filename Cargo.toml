@@ -3,5 +3,16 @@ resolver = "2"
 members = [
   "aral",
   "aral-trait",
-  "aral-adapters/*",
+  "aral-runtime/*",
 ]
+
+[workspace.package]
+authors = ["ARAL Development Team", "jmjoy <jmjoy@apache.org>"]
+edition = "2021"
+license = "Apache-2.0 OR MIT OR MulanPSL-2.0"
+repository = "https://github.com/aral-rs/aral.git"
+
+[workspace.dependencies]
+aral-trait = { version = "0.1.0", path = "./aral-trait" }
+aral-runtime-noop = { version = "0.1.0", path = "./aral-runtime/noop" }
+aral-runtime-tokio = { version = "0.1.0", path = "./aral-runtime/tokio" }

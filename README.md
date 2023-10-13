@@ -8,8 +8,7 @@ It lets you switch the executors smooth and easy without having to change your a
 **Note**: Libraries should not enable any runtime feature. You can choose the executor, by using cargo features.
 There can only be one enabled runtime. Valid features are:
 
-- **runtime-tokio-current-thread**
-- **runtime-tokio-multi-thread**
+- **runtime-tokio**
 - **runtime-async-std**
 
 ## Principle
@@ -17,7 +16,7 @@ There can only be one enabled runtime. Valid features are:
 1. NOT implement async runtime.
 
    Does not implement a concrete asynchronous runtime, only aggregate out-of-the-box asynchronous
-   runtimes.
+   runtime.
 
 1. Minimum available.
 
@@ -30,4 +29,4 @@ There can only be one enabled runtime. Valid features are:
 
 ## License
 
-Apache 2.0
+Apache-2.0 OR MIT OR MulanPSL-2.0

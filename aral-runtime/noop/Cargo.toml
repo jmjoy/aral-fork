@@ -1,6 +1,6 @@
 [package]
-name = "aral-trait"
-description = "ARAL trait."
+name = "aral-runtime-noop"
+description = "ARAL runtime for noop."
 version = "0.1.0"
 authors = { workspace = true }
 edition = { workspace = true }
@@ -10,3 +10,4 @@ repository = { workspace = true }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+aral-trait = { workspace = true }

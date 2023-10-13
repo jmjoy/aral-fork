@@ -5,4 +5,6 @@ pub mod fs;
 pub mod io;
 pub mod task;
 
-pub trait Runtime: fs::Fs + task::Task {}
+pub trait Runtime: fs::Fs + task::Task {
+    fn name() -> &'static str;
+}

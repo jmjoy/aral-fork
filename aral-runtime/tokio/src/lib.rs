@@ -3,9 +3,13 @@
 
 use aral_trait::{fs::Fs, task::Task};
 
-pub mod fs;
-pub mod task;
+mod fs;
+mod task;
 
 pub struct Runtime;
 
-impl aral_trait::Runtime for Runtime {}
+impl aral_trait::Runtime for Runtime {
+    fn name() -> &'static str {
+        "tokio"
+    }
+}
