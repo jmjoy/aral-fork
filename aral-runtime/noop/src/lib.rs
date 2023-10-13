@@ -2,7 +2,6 @@
 #![feature(async_fn_in_trait)]
 #![allow(unreachable_code)]
 
-use aral_trait::{fs::Fs, task::Task};
 use std::marker::PhantomData;
 
 macro_rules! no_adapter_specified {

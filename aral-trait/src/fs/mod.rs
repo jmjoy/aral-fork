@@ -1,4 +1,4 @@
-use crate::io::{BufRead, Read, Seek, Write};
+use crate::io::{Read, Seek, Write};
 use std::{
     fs::{Metadata, Permissions},
     future::Future,

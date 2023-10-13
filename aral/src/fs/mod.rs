@@ -2,7 +2,7 @@ use crate::current_runtime;
 use aral_trait::fs::Fs;
 use std::{
     fs::{Metadata, Permissions},
-    io::{Result, SeekFrom},
+    io::Result,
     path::{Path, PathBuf},
 };
 

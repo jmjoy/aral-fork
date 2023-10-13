@@ -6,8 +6,6 @@ pub mod fs;
 pub mod io;
 pub mod task;
 
-use aral_trait::{fs::Fs, task::Task};
-
 pub fn current_runtime() -> &'static impl aral_trait::Runtime {
     cfg_match! {
         cfg(feature = "runtime-tokio") => {

@@ -13,6 +13,6 @@ license = "Apache-2.0 OR MIT OR MulanPSL-2.0"
 repository = "https://github.com/aral-rs/aral.git"
 
 [workspace.dependencies]
-aral-trait = { version = "0.1.0", path = "./aral-trait" }
-aral-runtime-noop = { version = "0.1.0", path = "./aral-runtime/noop" }
-aral-runtime-tokio = { version = "0.1.0", path = "./aral-runtime/tokio" }
+aral-trait = { version = "0.1.0-alpha.3", path = "./aral-trait" }
+aral-runtime-noop = { version = "0.1.0-alpha.3", path = "./aral-runtime/noop" }
+aral-runtime-tokio = { version = "0.1.0-alpha.3", path = "./aral-runtime/tokio" }

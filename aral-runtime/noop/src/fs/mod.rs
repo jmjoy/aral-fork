@@ -18,14 +18,14 @@ impl File for Noop {
     }
 
     #[inline]
-    fn set_len(&self, size: u64) -> impl Future<Output = Result<()>> {
+    fn set_len(&self, _size: u64) -> impl Future<Output = Result<()>> {
         async move {
             no_adapter_specified!();
         }
     }
 
     #[inline]
-    fn set_permissions(&self, perm: std::fs::Permissions) -> impl Future<Output = Result<()>> {
+    fn set_permissions(&self, _perm: std::fs::Permissions) -> impl Future<Output = Result<()>> {
         async move {
             no_adapter_specified!();
         }
@@ -56,7 +56,7 @@ impl File for Noop {
 
 impl Read for Noop {
     #[inline]
-    fn read(&mut self, buf: &mut [u8]) -> impl Future<Output = Result<usize>> {
+    fn read(&mut self, _buf: &mut [u8]) -> impl Future<Output = Result<usize>> {
         async move {
             no_adapter_specified!();
         }
@@ -65,7 +65,7 @@ impl Read for Noop {
 
 impl Write for Noop {
     #[inline]
-    fn write(&mut self, buf: &[u8]) -> impl Future<Output = Result<usize>> {
+    fn write(&mut self, _buf: &[u8]) -> impl Future<Output = Result<usize>> {
         async move {
             no_adapter_specified!();
         }
@@ -81,7 +81,7 @@ impl Write for Noop {
 
 impl Seek for Noop {
     #[inline]
-    fn seek(&mut self, pos: std::io::SeekFrom) -> impl Future<Output = Result<u64>> {
+    fn seek(&mut self, _pos: std::io::SeekFrom) -> impl Future<Output = Result<u64>> {
         async move {
             no_adapter_specified!();
         }
@@ -90,48 +90,48 @@ impl Seek for Noop {
 
 impl OpenOptions for Noop {
     #[inline]
-    fn append(&mut self, append: bool) -> &mut Self {
+    fn append(&mut self, _append: bool) -> &mut Self {
         no_adapter_specified!();
     }
 
     #[inline]
-    fn create(&mut self, create: bool) -> &mut Self {
+    fn create(&mut self, _create: bool) -> &mut Self {
         no_adapter_specified!();
     }
 
     #[inline]
-    fn create_new(&mut self, create_new: bool) -> &mut Self {
+    fn create_new(&mut self, _create_new: bool) -> &mut Self {
         no_adapter_specified!();
     }
 
-    fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
+    fn open(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
         no_adapter_specified!();
         async move { Ok(Noop) }
     }
 
     #[inline]
-    fn read(&mut self, read: bool) -> &mut Self {
+    fn read(&mut self, _read: bool) -> &mut Self {
         no_adapter_specified!();
     }
 
     #[inline]
-    fn truncate(&mut self, truncate: bool) -> &mut Self {
+    fn truncate(&mut self, _truncate: bool) -> &mut Self {
         no_adapter_specified!();
     }
 
     #[inline]
-    fn write(&mut self, write: bool) -> &mut Self {
+    fn write(&mut self, _write: bool) -> &mut Self {
         no_adapter_specified!();
     }
 }
 
 impl Fs for Runtime {
-    fn create_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
+    fn create_file(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
         no_adapter_specified!();
         async move { Ok(Noop) }
     }
 
-    fn open_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
+    fn open_file(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
         no_adapter_specified!();
         async move { Ok(Noop) }
     }
@@ -141,7 +141,7 @@ impl Fs for Runtime {
         Noop
     }
 
-    fn canonicalize(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
+    fn canonicalize(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
@@ -149,7 +149,7 @@ impl Fs for Runtime {
     }
 
     fn copy(
-        &self, from: impl AsRef<Path>, to: impl AsRef<Path>,
+        &self, _from: impl AsRef<Path>, _to: impl AsRef<Path>,
     ) -> impl Future<Output = Result<u64>> {
         no_adapter_specified!();
         async move {
@@ -157,14 +157,14 @@ impl Fs for Runtime {
         }
     }
 
-    fn create_dir(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
+    fn create_dir(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn create_dir_all(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
+    fn create_dir_all(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
@@ -172,7 +172,7 @@ impl Fs for Runtime {
     }
 
     fn hard_link(
-        &self, src: impl AsRef<Path>, dst: impl AsRef<Path>,
+        &self, _src: impl AsRef<Path>, _dst: impl AsRef<Path>,
     ) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
@@ -180,49 +180,49 @@ impl Fs for Runtime {
         }
     }
 
-    fn metadata(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<std::fs::Metadata>> {
+    fn metadata(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<std::fs::Metadata>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn read(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>>> {
+    fn read(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<Vec<u8>>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn read_link(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
+    fn read_link(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn read_to_string(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<String>> {
+    fn read_to_string(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<String>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn remove_dir(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
+    fn remove_dir(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn remove_dir_all(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
+    fn remove_dir_all(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
         }
     }
 
-    fn remove_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
+    fn remove_file(&self, _path: impl AsRef<Path>) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
             no_adapter_specified!();
@@ -230,7 +230,7 @@ impl Fs for Runtime {
     }
 
     fn rename(
-        &self, from: impl AsRef<Path>, to: impl AsRef<Path>,
+        &self, _from: impl AsRef<Path>, _to: impl AsRef<Path>,
     ) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
@@ -239,7 +239,7 @@ impl Fs for Runtime {
     }
 
     fn set_permissions(
-        &self, path: impl AsRef<Path>, perm: std::fs::Permissions,
+        &self, _path: impl AsRef<Path>, _perm: std::fs::Permissions,
     ) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {
@@ -248,7 +248,7 @@ impl Fs for Runtime {
     }
 
     fn symlink_metadata(
-        &self, path: impl AsRef<Path>,
+        &self, _path: impl AsRef<Path>,
     ) -> impl Future<Output = Result<std::fs::Metadata>> {
         no_adapter_specified!();
         async move {
@@ -257,7 +257,7 @@ impl Fs for Runtime {
     }
 
     fn write(
-        &self, path: impl AsRef<Path>, contents: impl AsRef<[u8]>,
+        &self, _path: impl AsRef<Path>, _contents: impl AsRef<[u8]>,
     ) -> impl Future<Output = Result<()>> {
         no_adapter_specified!();
         async move {

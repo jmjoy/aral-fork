@@ -1,13 +1,6 @@
 use crate::current_runtime;
 use aral_trait::task::{JoinHandle, Task};
-use std::{
-    any::Any,
-    future::Future,
-    pin::{pin, Pin},
-    result,
-    task::{Context, Poll},
-    time::Duration,
-};
+use std::{future::Future, time::Duration};
 
 #[inline]
 pub async fn sleep(duration: Duration) {
