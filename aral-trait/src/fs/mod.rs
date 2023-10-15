@@ -27,7 +27,7 @@ pub trait OpenOptions: Default {
 
     fn create_new(&mut self, create_new: bool) -> &mut Self;
 
-    fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>>;
+    fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File + '_>>;
 
     fn read(&mut self, read: bool) -> &mut Self;
 

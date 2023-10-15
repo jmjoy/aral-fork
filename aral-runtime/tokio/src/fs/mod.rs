@@ -1,20 +1,20 @@
-use crate::Runtime;
 use aral_trait::{
     fs::{File, Fs, OpenOptions},
     io::{Read, Seek, Write},
 };
 use std::{
+    fs::Metadata,
     future::Future,
     io::Result,
     path::{Path, PathBuf},
 };
 use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt};
 
-pub struct FileImpl(tokio::fs::File);
+pub struct TokioFile(tokio::fs::File);
 
-impl File for FileImpl {
+impl File for TokioFile {
     #[inline]
-    fn metadata(&self) -> impl Future<Output = Result<std::fs::Metadata>> {
+    fn metadata(&self) -> impl Future<Output = Result<Metadata>> {
         self.0.metadata()
     }
 
@@ -40,18 +40,18 @@ impl File for FileImpl {
 
     #[inline]
     fn try_clone(&self) -> impl Future<Output = Result<impl File>> {
-        async move { self.0.try_clone().await.map(FileImpl) }
+        async move { self.0.try_clone().await.map(TokioFile) }
     }
 }
 
-impl Read for FileImpl {
+impl Read for TokioFile {
     #[inline]
     fn read(&mut self, buf: &mut [u8]) -> impl Future<Output = Result<usize>> {
         async move { AsyncReadExt::read(&mut self.0, buf).await }
     }
 }
 
-impl Write for FileImpl {
+impl Write for TokioFile {
     #[inline]
     fn write(&mut self, buf: &[u8]) -> impl Future<Output = Result<usize>> {
         async move { AsyncWriteExt::write(&mut self.0, buf).await }
@@ -63,7 +63,7 @@ impl Write for FileImpl {
     }
 }
 
-impl Seek for FileImpl {
+impl Seek for TokioFile {
     #[inline]
     fn seek(&mut self, pos: std::io::SeekFrom) -> impl Future<Output = Result<u64>> {
         async move { AsyncSeekExt::seek(&mut self.0, pos).await }
@@ -71,9 +71,9 @@ impl Seek for FileImpl {
 }
 
 #[derive(Default)]
-pub struct OpenOptionsImpl(tokio::fs::OpenOptions);
+pub struct TokioOpenOptions(tokio::fs::OpenOptions);
 
-impl OpenOptions for OpenOptionsImpl {
+impl OpenOptions for TokioOpenOptions {
     #[inline]
     fn append(&mut self, append: bool) -> &mut Self {
         self.0.append(append);
@@ -92,8 +92,8 @@ impl OpenOptions for OpenOptionsImpl {
         self
     }
 
-    fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { self.0.open(path).await.map(FileImpl) }
+    fn open(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File + '_>> {
+        async move { self.0.open(path).await.map(TokioFile) }
     }
 
     #[inline]
@@ -115,17 +115,19 @@ impl OpenOptions for OpenOptionsImpl {
     }
 }
 
-impl Fs for Runtime {
+pub struct TokioFs;
+
+impl Fs for TokioFs {
     fn create_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { tokio::fs::File::create(path).await.map(FileImpl) }
+        async move { tokio::fs::File::create(path).await.map(TokioFile) }
     }
 
     fn open_file(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<impl File>> {
-        async move { tokio::fs::File::open(path).await.map(FileImpl) }
+        async move { tokio::fs::File::open(path).await.map(TokioFile) }
     }
 
     fn open_options(&self) -> impl OpenOptions {
-        OpenOptionsImpl(tokio::fs::OpenOptions::new())
+        TokioOpenOptions(tokio::fs::OpenOptions::new())
     }
 
     fn canonicalize(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<PathBuf>> {
@@ -152,7 +154,7 @@ impl Fs for Runtime {
         tokio::fs::hard_link(src, dst)
     }
 
-    fn metadata(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<std::fs::Metadata>> {
+    fn metadata(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<Metadata>> {
         tokio::fs::metadata(path)
     }
 
@@ -192,9 +194,7 @@ impl Fs for Runtime {
         tokio::fs::set_permissions(path, perm)
     }
 
-    fn symlink_metadata(
-        &self, path: impl AsRef<Path>,
-    ) -> impl Future<Output = Result<std::fs::Metadata>> {
+    fn symlink_metadata(&self, path: impl AsRef<Path>) -> impl Future<Output = Result<Metadata>> {
         tokio::fs::symlink_metadata(path)
     }
 
