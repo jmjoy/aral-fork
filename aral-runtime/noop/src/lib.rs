@@ -12,6 +12,7 @@ macro_rules! no_runtime_specified {
 }
 
 mod fs;
+mod net;
 mod task;
 
 pub struct NoopRuntime;
@@ -34,6 +35,11 @@ impl Runtime for NoopRuntime {
 
     #[inline]
     fn task(&self) -> &'static impl aral_trait::task::Task {
+        &Self
+    }
+
+    #[inline]
+    fn net(&self) -> &'static impl aral_trait::net::Net {
         &Self
     }
 }

@@ -15,7 +15,6 @@ runtime-tokio = ["aral-runtime-tokio"]
 [dependencies]
 aral-runtime-noop = { workspace = true }
 aral-runtime-tokio = { workspace = true, optional = true }
-aral-trait = { workspace = true }
 
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "docs_rs"]

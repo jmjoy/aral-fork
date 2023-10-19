@@ -10,5 +10,5 @@ repository = { workspace = true }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+aral = { workspace = true }
 tokio = { version = "1.33.0", features = ["fs", "time", "rt", "io-util"] }
-aral-trait = { version = "0.1.0-alpha.3", path = "../../aral-trait" }

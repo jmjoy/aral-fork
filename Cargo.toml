@@ -2,7 +2,6 @@
 resolver = "2"
 members = [
   "aral",
-  "aral-trait",
   "aral-runtime/*",
   "tests/*",
 ]
@@ -15,6 +14,5 @@ repository = "https://github.com/aral-rs/aral.git"
 
 [workspace.dependencies]
 aral = { version = "0.1.0-alpha.3", path = "./aral" }
-aral-trait = { version = "0.1.0-alpha.3", path = "./aral-trait" }
 aral-runtime-noop = { version = "0.1.0-alpha.3", path = "./aral-runtime/noop" }
 aral-runtime-tokio = { version = "0.1.0-alpha.3", path = "./aral-runtime/tokio" }
